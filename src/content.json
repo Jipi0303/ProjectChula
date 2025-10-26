@@ -1,0 +1,27 @@
+{
+  "welcome": {
+    "text": "No sé si ya sabías que era ingeniero…\npero pensé en esta forma para escribirte esto .",
+    "buttonText": "Abrir carta 💌"
+  },
+  "detalle": {
+    "title": "El detalle",
+    "text": "Espero que te guste este pequeño detalle para endulzarte el día 🍰\nSi te encantan los cupcakes… excelente \nSi no… al menos ya tienes el sitio web más dulce js (y no me digas).",
+    "buttonText": "Seguir leyendo →"
+  },
+  "carta": {
+    "clickPrompt": "Haz clic en el sobre 3 veces...",
+    "message": "Bueno Marely, ahora que tengo tu atención…\nQuiero aprovechar para invitarte a salir \n¿Nos vemos el sábado? ",
+    "yesButton": "Sí",
+    "noButton": "No",
+    "successMessage": "¡Sabía que dirías que sí! 😎"
+  },
+  "panel": {
+    "title": "Novedades",
+    "items": [
+      { "icon": "mail", "text": "Cartas anter...", "available": false },
+      { "icon": "heart", "text": "Próximas s...", "available": false },
+      { "icon": "music", "text": "Musica del momen...", "available": false },
+      { "icon": "lock", "text": "Modo secreto", "available": false }
+    ]
+  }
+}
