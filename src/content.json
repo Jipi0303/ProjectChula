@@ -5,12 +5,12 @@
   },
   "detalle": {
     "title": "El detalle",
-    "text": "Espero que te guste este pequeño detalle para endulzarte el día 🍰\nSi te encantan los cupcakes… excelente \nSi no… al menos ya tienes el sitio web más dulce js (y no me digas).",
+    "text": "Espero que te guste este pequeño detalle para endulzarte el día 🧁\nSi te encantan los cupcakes… excelente \nSi no… al menos ya tienes el sitio web más dulce  ( y no me vayas a decir js ).",
     "buttonText": "Seguir leyendo →"
   },
   "carta": {
     "clickPrompt": "Haz clic en el sobre 3 veces...",
-    "message": "Bueno Marely, ahora que tengo tu atención…\nQuiero aprovechar para invitarte a salir \n¿Nos vemos el sábado? ",
+    "message": "Bueno Marely, ahora que tengo tu atención…\nQuiero aprovechar para invitarte a salir \n¿Nos vemos el este fin de semana? ",
     "yesButton": "Sí",
     "noButton": "No",
     "successMessage": "¡Sabía que dirías que sí! 😎"
