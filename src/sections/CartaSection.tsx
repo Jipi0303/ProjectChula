@@ -2,11 +2,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useRef, useEffect } from 'react';
 import Envelope from '../components/Envelope';
 import AnimatedButton from '../components/AnimatedButton';
+import { Check, AlertCircle, Loader } from 'lucide-react';
 
 /**
  * Sección de la carta principal con sobre interactivo
  * Incluye botones Sí/No con comportamiento divertido
  * El botón "No" se mueve y encoge hasta desaparecer
+ * Integración: Envía correo al hacer clic en "Sí"
  */
 
 interface CartaSectionProps {
@@ -15,6 +17,8 @@ interface CartaSectionProps {
   noButton: string; // Texto del botón No
   successMessage: string; // Mensaje al aceptar
   successGif?: string; // URL opcional de GIF celebración
+  recipientEmail?: string; // Email donde enviar la notificación (EDITABLE)
+  senderName?: string; // Nombre de quién envía la carta (opcional)
 }
 
 export default function CartaSection({
@@ -23,6 +27,8 @@ export default function CartaSection({
   noButton,
   successMessage,
   successGif,
+  recipientEmail = 'tu-email@ejemplo.com', // AQUÍ EDITA TU EMAIL
+  senderName,
 }: CartaSectionProps) {
   const [isEnvelopeOpen, setIsEnvelopeOpen] = useState(false); // Estado del sobre
   const [showButtons, setShowButtons] = useState(false); // Mostrar botones después de abrir
@@ -30,6 +36,9 @@ export default function CartaSection({
   const [noButtonScale, setNoButtonScale] = useState(1); // Escala del botón No
   const [noAttempts, setNoAttempts] = useState(0); // Intentos de clic en "No"
   const [showSuccess, setShowSuccess] = useState(false); // Modal de éxito
+  const [isLoading, setIsLoading] = useState(false); // Enviando correo
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'success' | 'error'>('idle'); // Estado del envío
+  const [emailError, setEmailError] = useState<string | null>(null); // Mensaje de error
   const noButtonRef = useRef<HTMLDivElement>(null);
 
   // Cuando se abre el sobre, mostrar botones después de un delay
@@ -39,9 +48,60 @@ export default function CartaSection({
     }
   }, [isEnvelopeOpen]);
 
+  // Función para enviar el correo a través del Edge Function
+  const sendYesEmail = async () => {
+    try {
+      setIsLoading(true);
+      setEmailError(null);
+
+      // Construir URL del Edge Function
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !anonKey) {
+        throw new Error('Variables de entorno de Supabase no configuradas');
+      }
+
+      // Llamar al Edge Function
+      const response = await fetch(
+        `${supabaseUrl}/functions/v1/send-response-email`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${anonKey}`,
+          },
+          body: JSON.stringify({
+            recipientEmail,
+            senderName,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Error al enviar el correo');
+      }
+
+      // Email enviado exitosamente
+      setEmailStatus('success');
+    } catch (error) {
+      // Error al enviar email
+      const message = error instanceof Error ? error.message : 'Error desconocido';
+      setEmailError(message);
+      setEmailStatus('error');
+      console.error('Error enviando correo:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Manejar clic en el botón "Sí"
-  const handleYes = () => {
+  const handleYes = async () => {
     setShowSuccess(true);
+    // Enviar el correo de forma asíncrona
+    await sendYesEmail();
   };
 
   // Manejar hover sobre el botón "No" - lo mueve aleatoriamente
@@ -192,7 +252,7 @@ export default function CartaSection({
               "
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Mensaje de éxito */}
+              {/* Mensaje de éxito principal */}
               <h2 className="text-3xl sm:text-4xl font-display font-bold text-gray-800 mb-6">
                 {successMessage}
               </h2>
@@ -212,6 +272,46 @@ export default function CartaSection({
               <div className="text-6xl mb-6 animate-bounce">
                 🎉
               </div>
+
+              {/* Estado del envío de correo */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mb-6 p-4 rounded-2xl bg-white/60 border-2 border-rosa-suave"
+              >
+                {isLoading && (
+                  <div className="flex items-center justify-center gap-3">
+                    <Loader className="w-5 h-5 animate-spin text-rosa-palo" />
+                    <p className="text-sm text-gray-700 font-body">
+                      Enviando notificación...
+                    </p>
+                  </div>
+                )}
+
+                {emailStatus === 'success' && !isLoading && (
+                  <div className="flex items-center justify-center gap-3">
+                    <Check className="w-5 h-5 text-green-500" />
+                    <p className="text-sm text-green-700 font-body">
+                      Notificación enviada a tu email
+                    </p>
+                  </div>
+                )}
+
+                {emailStatus === 'error' && !isLoading && (
+                  <div className="flex items-start justify-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+                    <div className="text-left">
+                      <p className="text-xs text-red-700 font-body">
+                        {emailError || 'Error al enviar notificación'}
+                      </p>
+                      <p className="text-xs text-gray-600 mt-1">
+                        (Pero tu respuesta fue registrada)
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
 
               {/* Botón para cerrar */}
               <AnimatedButton

@@ -13,7 +13,9 @@
     "message": "Bueno Marely, ahora que tengo tu atención…\nQuiero aprovechar para invitarte a salir, asi que \n¿Nos vemos el fin de semana? ",
     "yesButton": "Sí",
     "noButton": "No",
-    "successMessage": "¡Sabía que dirías que sí! 😎"
+    "successMessage": "¡Sabía que dirías que sí! 😎",
+    "recipientEmail": "tu-email-aqui@gmail.com",
+    "senderName": "Tu Nombre"
   },
   "panel": {
     "title": "Novedades",

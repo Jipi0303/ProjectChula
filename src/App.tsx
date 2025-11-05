@@ -58,6 +58,8 @@ function App() {
             noButton={content.carta.noButton}
             successMessage={content.carta.successMessage}
             successGif="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXJtNmR5ZHI3OHZtZnhpYWd2bzF5dTJxeWd6MzBvdmJqZXZ3bWs3ZyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/111ebonMs90YLu/giphy.gif"
+            recipientEmail={content.carta.recipientEmail}
+            senderName={content.carta.senderName}
           />
         )}
       </AnimatePresence>
