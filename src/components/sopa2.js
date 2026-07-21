@@ -123,7 +123,7 @@ function renderGrid(cells, gridSize) {
     grid.addEventListener('touchmove', handleTouchMove, { passive: false });
     grid.addEventListener('touchend', endDrag);
 }
-
+} // ESTE ERA EL PEDOOOOOO AJJAJAJAJ
 
 function handleTouchStart(e) {
     e.preventDefault(); // Evita scroll o zoom involuntario
