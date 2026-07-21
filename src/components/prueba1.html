@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sopa de Letras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        .container {
+            display: flex;
+            max-width: 1000px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .left-section {
+            padding: 20px;
+            border-right: 1px solid #ddd;
+        }
+        .right-section {
+            padding: 20px;
+            background-color: #f9f9f9;
+            flex: 1;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .message {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .timers {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(15, 30px);
+            gap: 2px;
+            margin-bottom: 20px;
+        }
+        .cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #333;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            user-select: none;
+        }
+        .cell.selected {
+            background-color: #cce7ff;
+        }
+        .cell.highlight {
+            background-color: #98fb98;
+        }
+        .end-buttons {
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .words-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .words-list li {
+            padding: 5px;
+            font-size: 16px;
+        }
+        .words-list li.found {
+            text-decoration: line-through;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-section">
+            <div class="title">Sopa de Letras</div>
+            <p class="message" id="message">Encuentra todas las palabras antes de que se acabe el tiempo. ¡Buena suerte!</p>
+            <div class="timers">
+                <div class="timer" id="timer1">3:00 ⭐⭐⭐</div>
+                <div class="timer" id="timer2">4:00 ⭐⭐</div>
+                <div class="timer" id="timer3">7:00 ⭐</div>
+            </div>
+            <div class="grid" id="grid"></div>
+            <div class="end-buttons" id="end-buttons">
+                <button class="button" id="restart-button">Reiniciar</button>
+                <button class="button" id="next-button">Siguiente Juego</button>
+            </div>
+        </div>
+        <div class="right-section">
+            <h3 style="text-align: center; margin-bottom: 10px;">Palabras a encontrar</h3>
+            <ul class="words-list" id="words-list"></ul>
+        </div>
+    </div>
+    <script src="sopa2.js"> </script>
+</body>
+</html>

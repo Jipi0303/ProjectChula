@@ -13,9 +13,7 @@
     "message": "Bueno Preciosa, ahora que tengo tu atención…\nQuiero aprovechar para invitarte un desayuno, asi que \n¿Nos vemos la proxima de semana? ",
     "yesButton": "Sí",
     "noButton": "No",
-    "successMessage": "¡Sabía que dirías que sí! 😎",
-    "recipientEmail": "brianespindola264@gmail.com",
-    "senderName": "Brian Espindola"
+    "successMessage": "¡Sabía que dirías que sí! 😎"
   },
   "panel": {
     "title": "Novedades",
