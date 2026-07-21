@@ -1,16 +1,16 @@
 {
   "welcome": {
-    "text": "No sé si ya sabías que era ingeniero…\npero pensé en esta forma para escribirte esto .",
+    "text": "Ya sabes que soy un ingeniero…\npensé en esta forma para escribirte \neste pequeño detalle, con toda la intencion de mostrarte cuanto te quiero",
     "buttonText": "Abrir carta ✉️"
   },
   "detalle": {
     "title": "El detalle",
-    "text": "Espero que te guste el detalle  🧁\nSi te gustan los cupcakes… Perfecto \nSi no… al menos ya tienes tu pagina propia  ( y no me vayas a decir eh ).",
+    "text": "Espero que te guste el detalle 🧁\nSi te gustan los cupcakes… Perfecto \nSi no… espera mis proximos postres ( Te amo ♥ ).",
     "buttonText": "Seguir leyendo →"
   },
   "carta": {
     "clickPrompt": "Haz clic en el sobre 3 veces...",
-    "message": "Bueno Marely, ahora que tengo tu atención…\nQuiero aprovechar para invitarte a salir, asi que \n¿Nos vemos el fin de semana? ",
+    "message": "Bueno Preciosa, ahora que tengo tu atención…\nQuiero aprovechar para invitarte un desayuno, asi que \n¿Nos vemos la proxima de semana? ",
     "yesButton": "Sí",
     "noButton": "No",
     "successMessage": "¡Sabía que dirías que sí! 😎",
@@ -23,7 +23,7 @@
       { "icon": "mail", "text": "Ya...", "available": false },
       { "icon": "heart", "text": "Veremos...", "available": false },
       { "icon": "music", "text": "Luego...", "available": false },
-      { "icon": "lock", "text": "Como va la cosa", "available": false }
+      { "icon": "lock", "text": "Como va la cosa preciosa", "available": false }
     ]
   }
 }
