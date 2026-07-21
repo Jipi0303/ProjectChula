@@ -1,13 +1,20 @@
 import { motion } from 'framer-motion';
-import { useEffect, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import Particles from '../components/Particles';
 import AnimatedButton from '../components/AnimatedButton';
+import pruebaHtml from '../components/prueba1.html?raw';
 import sopaScript from '../components/sopa2.js?raw';
 
 /**
  * Sección "Sopa de Letras"
- * Integra el juego de sopa de letras tal cual fue provisto,
- * envuelto en un fondo romántico que combina con el resto del sitio.
+ *
+ * Integra el juego tal cual fue provisto (prueba1.html + sopa2.js) dentro de
+ * un iframe con srcDoc. Esto preserva intactos el CSS y el JS del juego
+ * (incluida la lógica de arrastre, selección en línea recta, diagonales, etc.)
+ * y los aísla del ámbito global de React.
+ *
+ * El único ajuste permitido es el fondo: se hace transparente para que
+ * el gradiente romántico de la sección se vea a través del iframe.
  */
 
 interface SopaSectionProps {
@@ -15,21 +22,28 @@ interface SopaSectionProps {
 }
 
 export default function SopaSection({ onContinue }: SopaSectionProps) {
-  const scriptRef = useRef<HTMLScriptElement | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
-  useEffect(() => {
-    // Inyecta el script del juego tal cual, sin modificarlo
-    const script = document.createElement('script');
-    script.textContent = sopaScript;
-    document.body.appendChild(script);
-    scriptRef.current = script;
-
-    return () => {
-      if (scriptRef.current) {
-        document.body.removeChild(scriptRef.current);
-      }
-    };
+  const iframeContent = useMemo(() => {
+    return pruebaHtml
+      .replace(
+        '<script src="sopa2.js"> </script>',
+        `<script>${sopaScript}</script>`,
+      )
+      .replace('background-color: #f5f5f5;', 'background: transparent;');
   }, []);
+
+  const handleIframeLoad = () => {
+    const iframe = iframeRef.current;
+    if (!iframe?.contentWindow?.document) return;
+    try {
+      const body = iframe.contentWindow.document.body;
+      const height = body.scrollHeight;
+      if (height > 0) iframe.style.height = `${height + 20}px`;
+    } catch {
+      /* srcDoc es same-origin, pero por seguridad */
+    }
+  };
 
   return (
     <motion.section
@@ -49,29 +63,29 @@ export default function SopaSection({ onContinue }: SopaSectionProps) {
       <Particles count={20} />
 
       <div className="relative z-10 w-full flex flex-col items-center">
-        {/* Contenedor del juego - estructura HTML intacta del archivo original */}
-        <div className="container" style={{ display: 'flex', maxWidth: '1000px', background: 'white', border: '1px solid #ddd', borderRadius: '10px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', overflow: 'hidden' }}>
-          <div className="left-section" style={{ padding: '20px', borderRight: '1px solid #ddd' }}>
-            <div className="title" style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Sopa de Letras</div>
-            <p className="message" id="message" style={{ fontSize: '16px', marginBottom: '20px', color: '#555' }}>Encuentra todas las palabras antes de que se acabe el tiempo. ¡Buena suerte!</p>
-            <div className="timers" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <div className="timer" id="timer1" style={{ fontSize: '18px', fontWeight: 'bold', background: '#eee', padding: '10px', borderRadius: '5px' }}>3:00 ⭐⭐⭐</div>
-              <div className="timer" id="timer2" style={{ fontSize: '18px', fontWeight: 'bold', background: '#eee', padding: '10px', borderRadius: '5px' }}>4:00 ⭐⭐</div>
-              <div className="timer" id="timer3" style={{ fontSize: '18px', fontWeight: 'bold', background: '#eee', padding: '10px', borderRadius: '5px' }}>7:00 ⭐</div>
-            </div>
-            <div className="grid" id="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(15, 30px)', gap: '2px', marginBottom: '20px' }}></div>
-            <div className="end-buttons" id="end-buttons" style={{ display: 'none', flexDirection: 'column', gap: '10px' }}>
-              <button className="button" id="restart-button" style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}>Reiniciar</button>
-              <button className="button" id="next-button" style={{ padding: '10px', backgroundColor: '#007bff', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontSize: '16px' }}>Siguiente Juego</button>
-            </div>
-          </div>
-          <div className="right-section" style={{ padding: '20px', backgroundColor: '#f9f9f9', flex: 1 }}>
-            <h3 style={{ textAlign: 'center', marginBottom: '10px' }}>Palabras a encontrar</h3>
-            <ul className="words-list" id="words-list" style={{ listStyle: 'none', padding: 0, margin: 0 }}></ul>
-          </div>
-        </div>
+        <motion.h2
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl sm:text-4xl font-display font-bold text-gray-700 mb-6 text-center"
+        >
+          Un pequeño juego antes de tu carta...
+        </motion.h2>
 
-        {/* Botón para continuar a la carta */}
+        <iframe
+          ref={iframeRef}
+          srcDoc={iframeContent}
+          title="Sopa de Letras"
+          onLoad={handleIframeLoad}
+          className="
+            w-full max-w-4xl
+            bg-transparent border-0
+            rounded-2xl
+            overflow-x-auto
+          "
+          style={{ minHeight: '650px' }}
+        />
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -84,7 +98,7 @@ export default function SopaSection({ onContinue }: SopaSectionProps) {
             animate={true}
             className="text-lg px-10 py-4"
           >
-            Ir a la carta ✉️
+            Ir a la carta
           </AnimatedButton>
         </motion.div>
       </div>
