@@ -158,7 +158,7 @@ export default function SidePanel({ items }: SidePanelProps) {
                   className="mt-8 p-4 bg-white/60 rounded-xl text-center"
                 >
                   <p className="text-sm text-gray-600 font-body italic">
-                    Future appointments or plans...
+                    Futuras cosas o planes chula...
                   </p>
                 </motion.div>
               </div>
