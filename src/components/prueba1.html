@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +8,18 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh; /* Permite scroll natural en pantallas pequeñas */
             background-color: #f5f5f5;
+            box-sizing: border-box;
         }
+        
         .container {
             display: flex;
+            width: 100%;
             max-width: 1000px;
             background: white;
             border: 1px solid #ddd;
@@ -24,76 +27,91 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
+        
         .left-section {
             padding: 20px;
             border-right: 1px solid #ddd;
+            flex: 2;
         }
+        
         .right-section {
             padding: 20px;
             background-color: #f9f9f9;
             flex: 1;
         }
+        
         .title {
             font-size: 24px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
+        
         .message {
             font-size: 16px;
             margin-bottom: 20px;
             color: #555;
         }
+        
         .timers {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 5px;
         }
+        
         .timer {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             background: #eee;
-            padding: 10px;
+            padding: 8px 12px;
             border-radius: 5px;
+            text-align: center;
+            flex: 1;
         }
+        
         .grid {
-    user-select: none;
-    -webkit-user-select: none;
-    -webkit-touch-callout: none;
-    touch-action: none; /* Crucial: evita que la pantalla se desplace                           al arrastrar */
-    
-    display: grid;
-    width: 100%;
-    max-width: 500px; /* Tamaño máximo para escritorio */
-    margin: 0 auto 20px auto;
-    gap: 2px;
-}
-    .cell {
- 
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: clamp(14px, 4vw, 20px); /* La letra escala según la                                             pantalla */
-    background: #f0f0f0;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    border-radius: 4px;
-}
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            touch-action: none; /* Evita desplazamientos indeseados al deslizar el dedo */
+            
+            display: grid;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 20px auto;
+            gap: 2px;
+        }
+        
+        .cell {
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: clamp(14px, 4vw, 20px);
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            border-radius: 4px;
+        }
+        
         .cell.selected {
             background-color: #cce7ff;
         }
+        
         .cell.highlight {
             background-color: #98fb98;
         }
+        
         .end-buttons {
             display: none;
             flex-direction: column;
             gap: 10px;
         }
+        
         .button {
             padding: 10px;
             background-color: #007bff;
@@ -103,36 +121,52 @@
             cursor: pointer;
             font-size: 16px;
         }
+        
         .button:hover {
             background-color: #0056b3;
         }
+        
         .words-list {
             list-style: none;
             padding: 0;
             margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Lista adaptable */
+            gap: 5px;
         }
+        
         .words-list li {
             padding: 5px;
-            font-size: 16px;
+            font-size: 15px;
         }
+        
         .words-list li.found {
             text-decoration: line-through;
             color: #888;
         }
 
-/* En móviles, la sección izquierda y la lista se deben apilar verticalmente */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column;
-        width: 95%;
-        margin: 10px auto;
-    }
-    .left-section, .right-section {
-        padding: 10px;
-        width: 100%;
-        box-sizing: border-box;
-    }
-}   
+        /* Dispositivos Móviles */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            .container {
+                flex-direction: column;
+                border-radius: 8px;
+            }
+            .left-section {
+                border-right: none;
+                border-bottom: 1px solid #ddd;
+                padding: 15px;
+            }
+            .right-section {
+                padding: 15px;
+            }
+            .timer {
+                font-size: 14px;
+                padding: 6px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -156,6 +190,6 @@
             <ul class="words-list" id="words-list"></ul>
         </div>
     </div>
-    <script src="sopa2.js"> </script>
+    <script src="sopa2.js"></script>
 </body>
 </html>
