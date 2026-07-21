@@ -56,25 +56,33 @@
             border-radius: 5px;
         }
         .grid {
-            display: grid;
-            grid-template-columns: repeat(15, 30px);
-            gap: 2px;
-            margin-bottom: 20px;
-        }
-        .cell {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: #333;
-            background: #f0f0f0;
-            border: 1px solid #ccc;
-            cursor: pointer;
-            user-select: none;
-        }
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none; /* Crucial: evita que la pantalla se desplace                           al arrastrar */
+    
+    display: grid;
+    width: 100%;
+    max-width: 500px; /* Tamaño máximo para escritorio */
+    margin: 0 auto 20px auto;
+    gap: 2px;
+}
+    .cell {
+ 
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: clamp(14px, 4vw, 20px); /* La letra escala según la pantalla */
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 4px;
+}
         .cell.selected {
             background-color: #cce7ff;
         }
@@ -111,6 +119,20 @@
             text-decoration: line-through;
             color: #888;
         }
+
+   /* En móviles, la sección izquierda y la lista se deben apilar verticalmente */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        width: 95%;
+        margin: 10px auto;
+    }
+    .left-section, .right-section {
+        padding: 10px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+}   
     </style>
 </head>
 <body>
