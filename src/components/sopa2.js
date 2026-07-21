@@ -23,6 +23,18 @@ let startCell = null;
 let currentHighlighted = [];
 let currentGridSize = 0;
 
+function showStarLostToast() {
+    const toast = document.createElement('div');
+    toast.textContent = '¡Perdiste una estrella!';
+    toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ff4444;color:white;padding:15px 30px;border-radius:8px;font-size:18px;font-weight:bold;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.4s ease;';
+    document.body.appendChild(toast);
+    requestAnimationFrame(function() { toast.style.opacity = '1'; });
+    setTimeout(function() {
+        toast.style.opacity = '0';
+        setTimeout(function() { toast.remove(); }, 400);
+    }, 2500);
+}
+
 // Función para calcular el tamaño de la cuadrícula
 function calculateGridSize() {
     const maxWordLength = Math.max(...words.map(word => word.length));
@@ -128,7 +140,7 @@ function updateTimer() {
 
     if (timeRemaining <= 0) {
         clearInterval(interval);
-        alert('¡Perdiste una estrella!');
+        showStarLostToast();
         currentTimerIndex++;
         if (currentTimerIndex < timers.length) {
             timeRemaining = timers[currentTimerIndex];
