@@ -97,8 +97,8 @@ function generateGrid(gridSize) {
 
 function renderGrid(cells, gridSize) {
     grid.innerHTML = '';
-    // MEJORA: Ajustar las columnas del CSS dinámicamente según el cálculo
-    grid.style.gridTemplateColumns = `repeat(${gridSize}, 30px)`;
+    // Hacemos que cada columna ocupe 1 fracción igual del contenedor disponible
+    grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
 
     cells.forEach((letter, index) => {
         const cell = document.createElement('div');
@@ -108,15 +108,41 @@ function renderGrid(cells, gridSize) {
         cell.dataset.row = Math.floor(index / gridSize);
         cell.dataset.col = index % gridSize;
         
-        // MEJORA: Eventos de arrastre en lugar de clics
+        // Eventos para Mouse (Escritorio)
         cell.addEventListener('mousedown', startDrag);
         cell.addEventListener('mouseenter', drag);
         
         grid.appendChild(cell);
     });
     
-    // Escuchar el mouseup en todo el documento para evitar que se quede pegado
+  // Eventos globales de Mouse
     document.addEventListener('mouseup', endDrag);
+
+    // EVENTOS TÁCTILES (Móviles / Tablets)
+    grid.addEventListener('touchstart', handleTouchStart, { passive: false });
+    grid.addEventListener('touchmove', handleTouchMove, { passive: false });
+    grid.addEventListener('touchend', endDrag);
+}
+}
+
+function handleTouchStart(e) {
+    e.preventDefault(); // Evita scroll o zoom involuntario
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target && target.classList.contains('cell')) {
+        startDrag({ button: 0, target: target });
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault(); // Evita selecciones indeseadas del sistema
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    // Identifica la celda sobre la que se encuentra el dedo actualmente
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target && target.classList.contains('cell')) {
+        drag({ target: target });
+    }
 }
 
 function renderWordsList() {
