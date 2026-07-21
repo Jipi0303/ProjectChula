@@ -5,41 +5,49 @@ let timeRemaining = timers[currentTimerIndex];
 let interval;
 let wordsFound = 0;
 
-const grid = document.getElementById('grid');
-const wordsList = document.getElementById('words-list');
-const timerElements = [
-    document.getElementById('timer1'),
-    document.getElementById('timer2'),
-    document.getElementById('timer3')
-];
-const messageElement = document.getElementById('message');
-const endButtons = document.getElementById('end-buttons');
-const restartButton = document.getElementById('restart-button');
-const nextButton = document.getElementById('next-button');
-
-// Nuevas variables para el control de arrastre (Drag)
 let isDragging = false;
 let startCell = null;
 let currentHighlighted = [];
 let currentGridSize = 0;
+
+// Variables del DOM (Se declaran aquí, se asignan tras cargar el HTML)
+let grid, wordsList, timerElements, messageElement, endButtons, restartButton, nextButton;
+
+// BLINDAJE: Esperar a que el HTML exista antes de arrancar el juego
+document.addEventListener('DOMContentLoaded', () => {
+    grid = document.getElementById('grid');
+    wordsList = document.getElementById('words-list');
+    timerElements = [
+        document.getElementById('timer1'),
+        document.getElementById('timer2'),
+        document.getElementById('timer3')
+    ];
+    messageElement = document.getElementById('message');
+    endButtons = document.getElementById('end-buttons');
+    restartButton = document.getElementById('restart-button');
+    nextButton = document.getElementById('next-button');
+
+    restartButton.addEventListener('click', resetGame);
+    nextButton.addEventListener('click', nextLevel);
+
+    initGame();
+});
 
 function showStarLostToast() {
     const toast = document.createElement('div');
     toast.textContent = '¡Perdiste una estrella!';
     toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#ff4444;color:white;padding:15px 30px;border-radius:8px;font-size:18px;font-weight:bold;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity 0.4s ease;';
     document.body.appendChild(toast);
-    requestAnimationFrame(function() { toast.style.opacity = '1'; });
-    setTimeout(function() {
+    requestAnimationFrame(() => { toast.style.opacity = '1'; });
+    setTimeout(() => {
         toast.style.opacity = '0';
-        setTimeout(function() { toast.remove(); }, 400);
+        setTimeout(() => { toast.remove(); }, 400);
     }, 2500);
 }
 
-// Función para calcular el tamaño de la cuadrícula
 function calculateGridSize() {
     const maxWordLength = Math.max(...words.map(word => word.length));
     const gridSize = Math.ceil(Math.sqrt(words.length * maxWordLength));
-    // Agregamos un poco de margen extra para que no quede tan apretado
     return gridSize + 2; 
 }
 
@@ -51,10 +59,9 @@ function canPlaceWord(cells, word, start, direction, gridSize) {
         if (row >= gridSize || col >= gridSize || col < 0 || row < 0 || (cells[cellIndex] && cells[cellIndex] !== word[i])) {
             return false;
         }
-        // Expandimos para aceptar diagonales (Mejora nivel 2)
         if (direction === 'H') col++;
         else if (direction === 'V') row++;
-        else if (direction === 'D') { col++; row++; } // Diagonal
+        else if (direction === 'D') { col++; row++; } 
     }
     return true;
 }
@@ -89,7 +96,6 @@ function generateGrid(gridSize) {
             }
             attempts++;
         }
-        if (!placed) console.error(`No se pudo colocar la palabra: ${word}`);
     });
 
     return cells.map(cell => cell || letters[Math.floor(Math.random() * letters.length)]);
@@ -97,8 +103,7 @@ function generateGrid(gridSize) {
 
 function renderGrid(cells, gridSize) {
     grid.innerHTML = '';
-    // MEJORA: Ajustar las columnas del CSS dinámicamente según el cálculo
-    grid.style.gridTemplateColumns = `repeat(${gridSize}, 30px)`;
+    grid.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
 
     cells.forEach((letter, index) => {
         const cell = document.createElement('div');
@@ -108,15 +113,38 @@ function renderGrid(cells, gridSize) {
         cell.dataset.row = Math.floor(index / gridSize);
         cell.dataset.col = index % gridSize;
         
-        // MEJORA: Eventos de arrastre en lugar de clics
+        // Mouse (PC)
         cell.addEventListener('mousedown', startDrag);
         cell.addEventListener('mouseenter', drag);
         
         grid.appendChild(cell);
     });
     
-    // Escuchar el mouseup en todo el documento para evitar que se quede pegado
     document.addEventListener('mouseup', endDrag);
+
+    // Táctil (Móvil)
+    grid.addEventListener('touchstart', handleTouchStart, { passive: false });
+    grid.addEventListener('touchmove', handleTouchMove, { passive: false });
+    grid.addEventListener('touchend', endDrag);
+}
+
+function handleTouchStart(e) {
+    e.preventDefault(); 
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target && target.classList.contains('cell')) {
+        startDrag({ button: 0, target: target });
+    }
+}
+
+function handleTouchMove(e) {
+    e.preventDefault(); 
+    if (!isDragging) return;
+    const touch = e.touches[0];
+    const target = document.elementFromPoint(touch.clientX, touch.clientY);
+    if (target && target.classList.contains('cell')) {
+        drag({ target: target });
+    }
 }
 
 function renderWordsList() {
@@ -133,9 +161,8 @@ function updateTimer() {
     const minutes = Math.floor(timeRemaining / 60);
     const seconds = timeRemaining % 60;
     
-    // Restaurar estilos de temporizadores
     timerElements.forEach(el => el.style.backgroundColor = '#eee');
-    timerElements[currentTimerIndex].style.backgroundColor = '#ffd700'; // Resaltar nivel actual
+    timerElements[currentTimerIndex].style.backgroundColor = '#ffd700';
     timerElements[currentTimerIndex].textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
 
     if (timeRemaining <= 0) {
@@ -159,12 +186,8 @@ function startTimer() {
     }, 1000);
 }
 
-// ==========================================
-// NUEVA LÓGICA DE SELECCIÓN (EL NÚCLEO)
-// ==========================================
-
 function startDrag(event) {
-    if (event.button !== 0) return; // Solo click izquierdo
+    if (event.button !== 0) return; 
     isDragging = true;
     startCell = event.target;
     currentHighlighted = [startCell];
@@ -183,12 +206,10 @@ function drag(event) {
     const diffRow = currRow - startRow;
     const diffCol = currCol - startCol;
 
-    // Validación estricta: Solo permitir líneas rectas
     if (diffRow !== 0 && diffCol !== 0 && Math.abs(diffRow) !== Math.abs(diffCol)) {
         return; 
     }
 
-    // Limpiar selección temporal anterior
     document.querySelectorAll('.cell.selected').forEach(cell => {
         if (!cell.classList.contains('highlight')) {
             cell.classList.remove('selected');
@@ -197,12 +218,10 @@ function drag(event) {
 
     currentHighlighted = [];
 
-    // Calcular la dirección del arrastre
     const stepRow = diffRow === 0 ? 0 : diffRow / Math.abs(diffRow);
     const stepCol = diffCol === 0 ? 0 : diffCol / Math.abs(diffCol);
     const distance = Math.max(Math.abs(diffRow), Math.abs(diffCol));
 
-    // Iluminar la nueva línea recta
     for (let i = 0; i <= distance; i++) {
         const r = startRow + (stepRow * i);
         const c = startCol + (stepCol * i);
@@ -225,7 +244,6 @@ function endDrag() {
 function checkWord() {
     if (currentHighlighted.length === 0) return;
 
-    // Extraer palabra en ambas direcciones (normal y al revés)
     const selectedWord = currentHighlighted.map(cell => cell.textContent).join('');
     const reversedWord = selectedWord.split('').reverse().join('');
     
@@ -236,18 +254,16 @@ function checkWord() {
     const wordListItem = foundWord ? document.querySelector(`li[data-word="${foundWord}"]`) : null;
 
     if (foundWord && wordListItem && !wordListItem.classList.contains('found')) {
-        // Éxito: La palabra es válida
         wordsFound++;
         wordListItem.classList.add('found');
         
         currentHighlighted.forEach(cell => {
             cell.classList.remove('selected');
-            cell.classList.add('highlight'); // Resaltado permanente (verde)
+            cell.classList.add('highlight'); 
         });
         
         checkGameCompletion();
     } else {
-        // Fallo: Limpiar la selección si es incorrecta
         currentHighlighted.forEach(cell => {
             if (!cell.classList.contains('highlight')) {
                 cell.classList.remove('selected');
@@ -258,8 +274,6 @@ function checkWord() {
     currentHighlighted = [];
 }
 
-// ==========================================
-
 function checkGameCompletion() {
     if (wordsFound === words.length) {
         endGame(true);
@@ -268,7 +282,7 @@ function checkGameCompletion() {
 
 function endGame(won) {
     clearInterval(interval);
-    document.removeEventListener('mouseup', endDrag); // Limpiar eventos
+    document.removeEventListener('mouseup', endDrag);
     endButtons.style.display = 'flex';
     messageElement.textContent = won ? '¡Ganaste! 🎉' : 'Se acabó el tiempo. 😢';
 
@@ -285,7 +299,6 @@ function initGame() {
     renderGrid(cells, currentGridSize); 
     renderWordsList();
     
-    // Restaurar temporizadores
     timerElements.forEach(el => el.textContent = el.textContent.split(' ')[0]);
     timerElements[0].textContent = '3:00 ⭐⭐⭐';
     timerElements[1].textContent = '4:00 ⭐⭐';
@@ -309,10 +322,5 @@ function resetGame() {
 }
 
 function nextLevel() {
-    resetGame(); // Por ahora reinicia, aquí puedes agregar lógica de niveles más complejos
+    resetGame(); 
 }
-
-restartButton.addEventListener('click', resetGame);
-nextButton.addEventListener('click', nextLevel);
-
-initGame();
