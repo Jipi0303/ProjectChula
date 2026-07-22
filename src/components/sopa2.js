@@ -310,7 +310,7 @@ function initGame() {
     wordsFound = 0;
     currentHighlighted = [];
     endButtons.style.display = 'none';
-    messageElement.textContent = 'Encuentra todas las palabras antes de que se acabe el tiempo. ¡Buena suerte!';
+    messageElement.textContent = 'Encuentra todas las palabras antes de que se acabe el tiempo. ¡Buena suerte chula!';
     messageElement.style.color = "#555";
 }
 
