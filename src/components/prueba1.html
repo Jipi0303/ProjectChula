@@ -89,7 +89,7 @@
             justify-content: center;
             align-items: center;
             font-weight: bold;
-            font-size: clamp(14px, 4vw, 20px);
+            font-size: clamp(12px, 3.5vw, 20px);
             background: #f0f0f0;
             border: 1px solid #ccc;
             cursor: pointer;
@@ -165,6 +165,53 @@
             .timer {
                 font-size: 14px;
                 padding: 6px;
+            }
+            .title {
+                font-size: 20px;
+            }
+            .message {
+                font-size: 14px;
+            }
+            .words-list {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            .words-list li {
+                font-size: 13px;
+            }
+        }
+
+        /* Pantallas muy pequeñas (~5 pulgadas, ~360px) */
+        @media (max-width: 400px) {
+            body {
+                padding: 3px;
+            }
+            .left-section, .right-section {
+                padding: 10px;
+            }
+            .title {
+                font-size: 18px;
+            }
+            .timers {
+                gap: 3px;
+            }
+            .timer {
+                font-size: 12px;
+                padding: 5px 4px;
+            }
+            .grid {
+                gap: 1px;
+            }
+            .words-list {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 4px;
+            }
+            .words-list li {
+                font-size: 12px;
+                padding: 4px;
+            }
+            .button {
+                padding: 8px;
+                font-size: 14px;
             }
         }
     </style>

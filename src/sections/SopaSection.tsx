@@ -65,7 +65,7 @@ export default function SopaSection({ onContinue }: SopaSectionProps) {
   const iframeContent = useMemo(() => {
     return pruebaHtml
       .replace(
-        '<script src="sopa2.js"> </script>',
+        /<script\s+src=["']sopa2\.js["']>\s*<\/script>/i,
         `<script>${sopaScript}</script>`,
       )
       .replace('background-color: #f5f5f5;', 'background: transparent;')

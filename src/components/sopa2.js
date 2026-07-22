@@ -30,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
     restartButton.addEventListener('click', resetGame);
     nextButton.addEventListener('click', nextLevel);
 
+    document.addEventListener('mouseup', endDrag);
+
     initGame();
 });
 
@@ -120,8 +122,6 @@ function renderGrid(cells, gridSize) {
         grid.appendChild(cell);
     });
     
-    document.addEventListener('mouseup', endDrag);
-
     // Táctil (Móvil)
     grid.addEventListener('touchstart', handleTouchStart, { passive: false });
     grid.addEventListener('touchmove', handleTouchMove, { passive: false });
