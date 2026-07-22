@@ -123,7 +123,7 @@ export default function SopaSection({ onContinue }: SopaSectionProps) {
           transition={{ duration: 0.6 }}
           className="text-3xl sm:text-4xl font-display font-bold text-gray-700 mb-6 text-center"
         >
-          Un pequeño juego antes de tu carta...
+          Un pequeño jueguito antes de tu carta chula...
         </motion.h2>
 
         <iframe
