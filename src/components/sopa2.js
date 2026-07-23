@@ -1,4 +1,4 @@
-const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS', 'COREANOS', 'LENTES'];
+const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS', 'LENTES'];
 const timers = [240, 270, 420]; // 4:00, 4:30, 7:00
 
 // Paleta de colores pastel para las palabras encontradas
