@@ -1,5 +1,5 @@
 const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS'];
-const timers = [180, 240, 420]; // 3:00, 4:00, 7:00
+const timers = [220, 240, 420]; // 3:00, 4:00, 7:00
 let currentTimerIndex = 0;
 let timeRemaining = timers[currentTimerIndex];
 let interval;
@@ -300,7 +300,7 @@ function initGame() {
     renderWordsList();
     
     timerElements.forEach(el => el.textContent = el.textContent.split(' ')[0]);
-    timerElements[0].textContent = '3:00 ⭐⭐⭐';
+    timerElements[0].textContent = '3:40 ⭐⭐⭐';
     timerElements[1].textContent = '4:00 ⭐⭐';
     timerElements[2].textContent = '7:00 ⭐';
 
