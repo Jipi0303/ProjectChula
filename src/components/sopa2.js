@@ -1,5 +1,12 @@
 const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS'];
-const timers = [180, 240, 420]; // 3:00, 4:00, 7:00
+const timers = [240, 270, 420]; // 4:00, 4:30, 7:00
+
+// Paleta de colores pastel para las palabras encontradas
+const coloresResaltado = [
+    '#FFB3BA', '#FFDFBA', '#FFFFBA', '#BAFFC9', '#BAE1FF', 
+    '#E8BAFF', '#FFBAE8', '#B5EAD7', '#C7CEEA', '#FDFD96', 
+    '#FFDAC1', '#E2F0CB', '#B28DFF', '#FF9CEE', '#D0F0C0'
+];
 let currentTimerIndex = 0;
 let timeRemaining = timers[currentTimerIndex];
 let interval;
@@ -244,6 +251,7 @@ function endDrag() {
 function checkWord() {
     if (currentHighlighted.length === 0) return;
 
+    // Extraer palabra en ambas direcciones (normal y al revés)
     const selectedWord = currentHighlighted.map(cell => cell.textContent).join('');
     const reversedWord = selectedWord.split('').reverse().join('');
     
@@ -254,23 +262,34 @@ function checkWord() {
     const wordListItem = foundWord ? document.querySelector(`li[data-word="${foundWord}"]`) : null;
 
     if (foundWord && wordListItem && !wordListItem.classList.contains('found')) {
+        // Éxito: La palabra es válida
+        
+        // Elegimos un color de la lista según la cantidad de palabras encontradas
+        const colorActual = coloresResaltado[wordsFound % coloresResaltado.length];
+        
         wordsFound++;
         wordListItem.classList.add('found');
         
         currentHighlighted.forEach(cell => {
             cell.classList.remove('selected');
             cell.classList.add('highlight'); 
+            
+            // Aplicamos el color único a cada letra de la palabra
+            cell.style.backgroundColor = colorActual;
         });
         
         checkGameCompletion();
     } else {
+        // Fallo: Limpiar la selección si es incorrecta
         currentHighlighted.forEach(cell => {
+            // Solo borramos el color de selección si la celda no era parte de una palabra ya encontrada
             if (!cell.classList.contains('highlight')) {
                 cell.classList.remove('selected');
             }
         });
     }
     
+    // Vaciamos el arreglo para estar listos para el siguiente arrastre
     currentHighlighted = [];
 }
 
