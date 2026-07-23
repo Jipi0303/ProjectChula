@@ -252,6 +252,7 @@ function endDrag() {
 function checkWord() {
     if (currentHighlighted.length === 0) return;
 
+    // Extraer palabra en ambas direcciones (normal y al revés)
     const selectedWord = currentHighlighted.map(cell => cell.textContent).join('');
     const reversedWord = selectedWord.split('').reverse().join('');
     
@@ -262,23 +263,34 @@ function checkWord() {
     const wordListItem = foundWord ? document.querySelector(`li[data-word="${foundWord}"]`) : null;
 
     if (foundWord && wordListItem && !wordListItem.classList.contains('found')) {
+        // Éxito: La palabra es válida
+        
+        // Elegimos un color de la lista según la cantidad de palabras encontradas
+        const colorActual = coloresResaltado[wordsFound % coloresResaltado.length];
+        
         wordsFound++;
         wordListItem.classList.add('found');
         
         currentHighlighted.forEach(cell => {
             cell.classList.remove('selected');
             cell.classList.add('highlight'); 
+            
+            // Aplicamos el color único a cada letra de la palabra
+            cell.style.backgroundColor = colorActual;
         });
         
         checkGameCompletion();
     } else {
+        // Fallo: Limpiar la selección si es incorrecta
         currentHighlighted.forEach(cell => {
+            // Solo borramos el color de selección si la celda no era parte de una palabra ya encontrada
             if (!cell.classList.contains('highlight')) {
                 cell.classList.remove('selected');
             }
         });
     }
     
+    // Vaciamos el arreglo para estar listos para el siguiente arrastre
     currentHighlighted = [];
 }
 
