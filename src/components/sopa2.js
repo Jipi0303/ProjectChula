@@ -1,5 +1,13 @@
 const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS'];
 const timers = [220, 240, 420]; // 3:00, 4:00, 7:00
+
+// Paleta de colores pastel para las palabras encontradas
+const coloresResaltado = [
+    '#FFB3BA', '#FFDFBA', '#FFFFBA', '#BAFFC9', '#BAE1FF', 
+    '#E8BAFF', '#FFBAE8', '#B5EAD7', '#C7CEEA', '#FDFD96', 
+    '#FFDAC1', '#E2F0CB', '#B28DFF', '#FF9CEE', '#D0F0C0'
+];
+
 let currentTimerIndex = 0;
 let timeRemaining = timers[currentTimerIndex];
 let interval;
