@@ -319,8 +319,8 @@ function initGame() {
     renderWordsList();
     
     timerElements.forEach(el => el.textContent = el.textContent.split(' ')[0]);
-    timerElements[0].textContent = '3:00 ⭐⭐⭐';
-    timerElements[1].textContent = '4:00 ⭐⭐';
+    timerElements[0].textContent = '4:00 ⭐⭐⭐';
+    timerElements[1].textContent = '4:30 ⭐⭐';
     timerElements[2].textContent = '7:00 ⭐';
 
     updateTimer();
