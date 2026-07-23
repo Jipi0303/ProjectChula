@@ -1,5 +1,5 @@
 const words = ['ALITAS', 'ROLES', 'ESPINDOLA', 'CHULA', 'INGENIERIA', 'DERECHO', 'DTODO', 'CHIKIS', 'UÑAS', 'LIBNI', 'HAMBURGUESA', 'TULIPANES', 'ROSAS', 'KAI', 'AMOR', 'GUITARRA', 'BTS', 'LENTES'];
-const timers = [210, 240, 420]; // 3:30, 4:00, 7:00
+const timers = [220, 240, 420]; // 3:40, 4:00, 7:00
 
 // Paleta de colores pastel para las palabras encontradas
 const coloresResaltado = [
@@ -319,7 +319,7 @@ function initGame() {
     renderWordsList();
     
     timerElements.forEach(el => el.textContent = el.textContent.split(' ')[0]);
-    timerElements[0].textContent = '3:30 ⭐⭐⭐';
+    timerElements[0].textContent = '3:40 ⭐⭐⭐';
     timerElements[1].textContent = '4:00 ⭐⭐';
     timerElements[2].textContent = '7:00 ⭐';
 
